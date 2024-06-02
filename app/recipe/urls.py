@@ -10,7 +10,11 @@ from django.urls import (
 
 from rest_framework.routers import DefaultRouter
 
-from .views import *
+from .views import (
+    RecipeViewSet,
+    TagViewSet,
+    IngrediantsViewSet
+)
 
 
 app_name = 'recipe'

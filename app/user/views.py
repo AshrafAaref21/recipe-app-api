@@ -4,7 +4,11 @@ Views for the user API.
 
 from django.conf import settings
 from django.core.mail import BadHeaderError, send_mail
-from drf_spectacular.utils import extend_schema, OpenApiParameter, extend_schema_view
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiParameter,
+    extend_schema_view
+)
 
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics, authentication, permissions, viewsets
@@ -87,14 +91,21 @@ def send_email(request):
         Response("User Not found.", status=status.HTTP_400_BAD_REQUEST)
 
     email_from = settings.EMAIL_HOST_USER
-    if data.get('email') and User.objects.filter(email=email).exists():
+    if (data.get('email') and
+            User.objects.filter(email=email).exists()):
         try:
             user.set_password(new_pass)
             user.save()
             send_mail(message=message, subject='Reset Passsowrd',
                       from_email=email_from, recipient_list=[email])
         except BadHeaderError:
-            return Response("Invalid header found.", status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Invalid header found.",
+                status=status.HTTP_400_BAD_REQUEST
+            )
         return Response('Check Your Mail', status=status.HTTP_200_OK)
     else:
-        return Response("It's not a valid Email.", status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            "It's not a valid Email.",
+            status=status.HTTP_400_BAD_REQUEST
+        )

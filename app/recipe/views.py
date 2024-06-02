@@ -64,7 +64,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
             ingrediants_ids = self._params_to_list_of_int(ingrediants)
             queryset = queryset.filter(ingrediants__id__in=ingrediants_ids)
 
-        return queryset.filter(user=self.request.user).order_by('-id').distinct()
+        return queryset.filter(
+            user=self.request.user
+        ).order_by('-id').distinct()
 
     def get_serializer_class(self):
         """Return the Serializer class for specific request."""
@@ -123,7 +125,9 @@ class BaseRecipeAttrViewSet(
         if assigned_only:
             queryset = queryset.filter(recipe__isnull=False)
 
-        return queryset.filter(user=self.request.user).order_by('-name').distinct()
+        return queryset.filter(
+            user=self.request.user
+        ).order_by('-name').distinct()
 
 
 class TagViewSet(BaseRecipeAttrViewSet):

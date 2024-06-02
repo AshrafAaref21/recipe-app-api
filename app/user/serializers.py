@@ -9,6 +9,7 @@ from django.contrib.auth import (
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
+from datetime import datetime
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,11 +17,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ['email', 'password', 'name']
+        fields = ['id', 'is_staff', 'email', 'password', 'name']
         extra_kwargs = {
             'password': {
                 'write_only': True,
                 'min_length': 5
+            },
+            'is_staff': {
+                'read_only': True,
             }
         }
 
@@ -62,6 +66,15 @@ class AuthTokenSerializer(serializers.Serializer):
             msg = _("Unable to authenticate with provided credintials.")
             raise serializers.ValidationError(msg, code='authorization')
 
+        user.last_login = datetime.now()
+        user.save()
         attrs['user'] = user
 
         return attrs
+
+
+class AdminDashboardSerializer(UserSerializer):
+    """Serializer for the users for Admin Dashboard."""
+    class Meta:
+        model = get_user_model()
+        fields = "__all__"

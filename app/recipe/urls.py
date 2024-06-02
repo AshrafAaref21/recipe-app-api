@@ -10,15 +10,15 @@ from django.urls import (
 
 from rest_framework.routers import DefaultRouter
 
-from .views import *
+from core import views
 
 
 app_name = 'recipe'
 
 router = DefaultRouter()
-router.register('recipes', RecipeViewSet)
-router.register('tags', TagViewSet)
-router.register('ingrediants', IngrediantsViewSet)
+router.register('recipes', views.RecipeViewSet)
+router.register('tags', views.TagViewSet)
+router.register('ingrediants', views.IngrediantsViewSet)
 
 urlpatterns = [
     path('', include(router.urls))
